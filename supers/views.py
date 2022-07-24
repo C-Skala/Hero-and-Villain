@@ -10,13 +10,14 @@ from super_types.serializers import Super_types_serializers
 @api_view(['GET', 'POST'])
 def Supers_list(request):
     if request.method == 'GET':
-        super_type_lookup = request.query_params.get('type')
+       
+        super_type = request.query_params.get('super_type_lookup')
         queryset = Supers.objects.all()
-        if queryset:
-            queryset = queryset.filter(super_type=super_type_lookup)
+       
+        if super_type:
+           queryset = queryset.filter(super_type__type = super_type)
 
-        supers = Supers.objects.all()
-        serializer = Superserilaizers(supers, many=True)
+        serializer = Superserilaizers(queryset, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
         serializer = Superserilaizers(data=request.data)
